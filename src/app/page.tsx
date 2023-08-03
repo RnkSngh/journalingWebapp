@@ -27,6 +27,7 @@ export default function Home() {
         <h1> Loading .. </h1>
       ) : (
         <div>
+          <h1> Version 0.2.</h1>
           <h1> There were {entries} entries submitted Total! </h1>
           <h1> There were {entriesToday} entries submitted Today! </h1>
         </div>
