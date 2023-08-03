@@ -6,10 +6,10 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  --primary-color: green;
-  --text-color: darkBlue;
-  --background-color: lightPink;
-  --background-secondary-color: gray;
+  --primary-color: white;
+  --text-color: white;
+  --background-color: lightBlue;
+  --background-secondary-color: darkgray;
   --secondary-color: lightBlue;
 }
 

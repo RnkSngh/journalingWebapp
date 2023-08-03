@@ -1,6 +1,6 @@
 "use client";
 
-import { getPairedHashText} from "./actions/actions";
+import { getPairedHashText } from "./actions/actions";
 import { useEffect, useState } from "react";
 
 export default function RetrieveJournalEntry() {
@@ -25,10 +25,12 @@ export default function RetrieveJournalEntry() {
 
   return (
     <>
-      <p>
-        You&apos;ve been paired with another stranger&apos;s Journal Entry! Here
-        it is:{" "}
-      </p>
+      {userEntry && (
+        <p>
+          You&apos;ve been paired with another stranger&apos;s Journal Entry!
+          Here it is:{" "}
+        </p>
+      )}
       <p>{userEntry}</p>
       {errorMsg && <p> ERROR: {errorMsg}</p>}
     </>
