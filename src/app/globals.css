@@ -6,6 +6,11 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --primary-color: green;
+  --text-color: darkBlue;
+  --background-color: lightPink;
+  --background-secondary-color: gray;
+  --secondary-color: lightBlue;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,4 +23,18 @@
 
 body {
   color: rgb(var(--foreground-rgb));
+}
+
+textarea{
+  background-color: var(--background-color);
+  width: 1080px;
+  height: 500px;
+}
+
+h1{
+  color: var(--text-color)
+}
+
+p{
+  color: var(--text-color);
 }

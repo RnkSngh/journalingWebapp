@@ -1,33 +1,33 @@
-import { cookies } from "next/headers";
-import clientPromise from "../../lib/db";
-import { revalidatePath } from "next/cache";
+"use client";
 
-let entry: string;
+import { readEntryFromHash } from "./actions/actions";
+import { useEffect, useState } from "react";
+
 export default function RetrieveJournalEntry() {
-  "use client";
+  const [userEntry, setUserEntry] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const readEntryFromHash = async (data: FormData) => {
-    "use server";
+  useEffect(() => {
+    const lookForCorrespondingJournal = async (hash: string) => {
+      const entry = await readEntryFromHash(hash);
+      if (entry?.text) {
+        setUserEntry(entry.text);
+      } else {
+        setErrorMsg("Couldn't find Entry");
+      }
+    };
 
-    const hash = data.get("journal-lookup-hash") as string;
-    const client = await clientPromise;
-    const db = client.db();
-    entry = (await db.collection("posts").findOne({ hash: hash }))!.text;
-    console.log(await db.collection("posts").findOne({ hash: hash }));
-    console.log("entry", entry);
-    revalidatePath("/");
-    return entry;
-  };
+    const hash = localStorage.getItem("journalShare.hash");
+    if (hash) {
+      lookForCorrespondingJournal(hash);
+    }
+  });
 
   return (
     <>
-      <form action={readEntryFromHash}>
-        <h1> Journal Text </h1>
-        <input name="journal-lookup-hash"></input>
-        <button>Read Corresponding Entry</button>
-      </form>
-      <p>Journal Entry: {entry}</p>
+      <p>Journal Entry: </p>
+      <p>{userEntry}</p>
+      {errorMsg && <p> ERROR: {errorMsg}</p>}
     </>
   );
 }
-

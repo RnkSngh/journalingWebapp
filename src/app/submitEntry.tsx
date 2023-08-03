@@ -1,44 +1,60 @@
-import { cookies } from "next/headers";
-import { useState } from "react";
-import clientPromise from "../../lib/db";
-import { sha256 } from "../../lib/hash";
-import { revalidatePath } from "next/cache";
+"use client";
 
-let hash: string;
+import { useEffect, useState } from "react";
+import { addJournalHash, readEntryFromHash } from "./actions/actions";
+import { RESET_TIME } from "./config";
+
 export default function SubmitJournalEntry() {
-  "use client";
+  const [userHash, setUserHash] = useState("");
 
-  async function addItem(data: FormData) {
-    "use server";
+  useEffect(() => {
+    const checkHash = async (hash: string) => {
+      const entry = await readEntryFromHash(hash);
 
-    const client = await clientPromise;
-    const db = client.db();
-    const journalText = data.get("journal-text-form") as string;
-    hash = await sha256(journalText);
-    db.collection("posts").insertOne({
-      text: data.get("journal-text-form"),
-      hash: hash,
-    });
+      if (entry) {
+        if (Date.now() - entry!.createdAt > RESET_TIME) {
+          localStorage.setItem("journalShare.hash", "");
+        } else {
+          setUserHash(entry.hash);
+        }
+      }
+    };
 
-    revalidatePath("/");
-  }
+    const hash = localStorage.getItem("journalShare.hash");
+    if (hash) {
+      checkHash(hash);
+    }
+  });
+
+  const handleFormSubmit = async (formData: FormData) => {
+    try {
+      const hash = await addJournalHash(formData);
+      localStorage.setItem("journalShare.hash", hash);
+      setUserHash(hash);
+    } catch (e) {}
+  };
 
   return (
-    <>
-      <form action={addItem}>
+    <div className="pl-10 pt-10">
+      <form action={handleFormSubmit}>
         <h1> Submit Journal Text </h1>
-        <textarea name="journal-text-form" />
-        <button type="submit">Submit Entry</button>
+        <textarea className="w-500" name="journal-text-form" />
+
+        {userHash ? (
+          <p>
+            You already submitted an entry for today! Go to ./lookup to see a
+            how a stranger&apos;s day was!
+          </p>
+        ) : (
+          <p> Submit your Journal Entry to get your hash to look up later </p>
+        )}
+        <button
+          type="submit"
+          className="bg-blue-200 flex rounded-full flex-nowrap"
+        >
+          Submit Entry
+        </button>
       </form>
-      {hash ? (
-        <p>
-          Submitted! Your hash is : {hash} . Save this and use this to read
-          another journal entry!
-        </p>
-      ) : (
-        <p> Submit your Journal Entry to get your hash to look up later </p>
-      )}
-    </>
+    </div>
   );
 }
-
