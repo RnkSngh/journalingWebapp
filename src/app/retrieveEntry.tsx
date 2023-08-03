@@ -1,6 +1,6 @@
 "use client";
 
-import { readEntryFromHash } from "./actions/actions";
+import { getPairedHashText} from "./actions/actions";
 import { useEffect, useState } from "react";
 
 export default function RetrieveJournalEntry() {
@@ -9,7 +9,7 @@ export default function RetrieveJournalEntry() {
 
   useEffect(() => {
     const lookForCorrespondingJournal = async (hash: string) => {
-      const entry = await readEntryFromHash(hash);
+      const entry = await getPairedHashText(hash);
       if (entry?.text) {
         setUserEntry(entry.text);
       } else {
@@ -25,7 +25,10 @@ export default function RetrieveJournalEntry() {
 
   return (
     <>
-      <p>Journal Entry: </p>
+      <p>
+        You&apos;ve been paired with another stranger&apos;s Journal Entry! Here
+        it is:{" "}
+      </p>
       <p>{userEntry}</p>
       {errorMsg && <p> ERROR: {errorMsg}</p>}
     </>

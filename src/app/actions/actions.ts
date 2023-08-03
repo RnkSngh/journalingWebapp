@@ -29,6 +29,26 @@ export async function readEntryFromHash(lookupHash: string) {
   return record;
 }
 
+// Looks up a corresponding entry from a hash
+export async function getPairedHashText(lookupHash: string) {
+  "use server";
+
+  const hash = lookupHash;
+  const client = await clientPromise;
+  const db = client.db();
+
+  const record = await db.collection("posts").findOne({ hash: hash });
+
+  if (record && record.pairedHash) {
+    const pairedRecord = await db
+      .collection("posts")
+      .findOne({ hash: record.pairedHash });
+    return pairedRecord;
+  } else {
+    return { text: "" };
+  }
+}
+
 // Returns the total amount of entries from the past time
 export async function getEntriesCountForToday() {
   const client = await clientPromise;
