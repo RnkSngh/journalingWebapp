@@ -1,0 +1,7 @@
+get http://localhost:3000/api/new
+
+
+
+
+### 
+get http://localhost:3000/api/cron

@@ -24,7 +24,7 @@ nav {
   padding: 16px;
   justify-content: space-between;
   align-items: center;
-  background-color: #f1f1f1;
+  background-color: #b30f0f;
 }
 .nav__menu-bar {
   display: flex;
@@ -49,10 +49,13 @@ nav {
   padding: 24px 16px;
   transition: all 0.2s;
   min-height: calc(100vh - 60px);
-  background-color: #f1f1f1;
+  background-color: #c13232;
 }
 .nav__menu-list.active {
-  right: 0;
+  color: red;
+}
+.nav__item.active{
+  color:red;
 }
 .nav__link {
   font-size: 18px;

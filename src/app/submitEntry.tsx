@@ -5,17 +5,23 @@ import { addJournalHash, readEntryFromHash } from "./actions/actions";
 import { RESET_TIME } from "./config";
 
 export default function SubmitJournalEntry() {
-  const [userHash, setUserHash] = useState("");
+  const [userEntry, setUserEntry] = useState("");
 
   useEffect(() => {
+    console.log("submitEntry use effect");
     const checkHash = async (hash: string) => {
       const entry = await readEntryFromHash(hash);
 
       if (entry) {
-        if (Date.now() - entry!.createdAt > RESET_TIME) {
+        console.log(
+          "date comparision",
+          Date.now() - entry.updatedAt,
+          RESET_TIME
+        );
+        if (Date.now() - entry.updatedAt > RESET_TIME) {
           localStorage.setItem("journalShare.hash", "");
         } else {
-          setUserHash(entry.hash);
+          setUserEntry(entry.text);
         }
       }
     };
@@ -30,24 +36,38 @@ export default function SubmitJournalEntry() {
     try {
       const hash = await addJournalHash(formData);
       localStorage.setItem("journalShare.hash", hash);
-      setUserHash(hash);
+      setUserEntry(hash);
     } catch (e) {}
   };
 
   return (
-    <div className="pl-10 pt-10">
+    <div>
       <form action={handleFormSubmit}>
-        <h1> Submit Journal Text </h1>
-        <textarea className="w-500" name="journal-text-form" />
-
-        {userHash ? (
-          <p>
-            You already submitted an entry for today! Go to ./lookup to see a
-            how a stranger&apos;s day was!
-          </p>
-        ) : (
-          <p> Submit your Journal Entry to get your hash to look up later </p>
+        <h1> Submit Journal Entry </h1>
+        {!userEntry && (
+          <>
+            <p>
+              {" "}
+              Submit your Journal Entry here so that you can look it up later{" "}
+            </p>
+            <textarea
+              disabled={Boolean(userEntry)}
+              className="w-500"
+              name="journal-text-form"
+            />
+          </>
         )}
+
+        {userEntry ? (
+          <div>
+            <p>
+              It looks like you already submitted an entry for today! Once
+              matched, you can read a stranger&apos;s entry{" "}
+              <a href="/submit"> here </a>!
+            </p>
+            <p> {userEntry} </p>
+          </div>
+        ) : null}
         <button
           type="submit"
           className="bg-blue-200 flex rounded-full flex-nowrap"

@@ -1,1 +1,1 @@
-export const RESET_TIME = 300 * 60* 1000; // Time, in milliseconds
+export const RESET_TIME = 24 * 60 * 60 * 1000; // Time, in milliseconds

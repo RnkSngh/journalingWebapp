@@ -1,39 +1,39 @@
 "use client";
 
-import Link from "next/link"
-import { useState } from "react"
+import Link from "next/link";
+import { useState } from "react";
 import NavItem from "./NavItem";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const MENU_LIST = [
+    { text: "Home", href: "/" },
+    { text: "Submit", href: "/submit" },
+    { text: "Lookup", href: "/lookup" },
+  ];
+  // const router = useRouter();
 
-    const [navActive, setNavActive] = useState(false);
-    const [activeIdx, setActiveIdx] = useState(-1);
-
-    const MENU_LIST = [
-        {text:"Home", href: "/"},
-        {text:"Submit", href: "/submit"},
-        {text:"Lookup", href: "/lookup"},
-        ]
-
-    return <header> 
-        <nav className={`bg-[color:var(--background-secondary-color)]`}>
-            <Link href={"/"}>
-                <h1 className="text-[color:var(--primary-color)] font-bold" > ScribbleSwap </h1>
-            </Link>
-            <div onClick={()=> setNavActive(!navActive)} className={`nav__menu-bar`}>
-            </div>
-            <div className={`${navActive? "active" : ""} bg-[color:var(--background-secondary-color)] nav__menu-list`}>
-                {MENU_LIST.map((menu, idx)=>(
-                <div onClick={()=>{
-                        setActiveIdx(idx);
-                        setNavActive(false);
-                    }}
-                    key={menu.text}
-                >
-                    <NavItem active={activeIdx === idx} {...menu}/>
-                </div>
-                ))}
-            </div>
-             </nav>
+  return (
+    <header>
+      <nav className={`bg-[color:var(--background-secondary-color)]`}>
+        <a href={"/"}>
+          <p className="text-[color:var(--primary-color)] font-bold">
+            {" "}
+            ScribbleSwap{" "}
+          </p>
+        </a>
+        <div
+          className={` bg-[color:var(--background-secondary-color)] nav__menu-list`}
+        >
+          {MENU_LIST.map((menu, idx) => (
+            // <Link href="/submitEntry" key={idx}>
+            //   {" "}
+            //   Test{" "}
+            // </Link>
+            <NavItem key={menu.text} {...menu} />
+          ))}
+        </div>
+      </nav>
     </header>
+  );
 }
