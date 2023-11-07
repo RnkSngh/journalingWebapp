@@ -41,10 +41,8 @@ export async function GET() {
       sortedDocuments.map(async (item, idx) => {
         if (idx % 2 == 0) {
           await setDbHash(item.hash, sortedDocuments[idx + 1].hash);
-          // console.log("pairedHash", sortedDocuments[idx + 1].hash);
         } else {
           await setDbHash(item.hash, sortedDocuments[idx - 1].hash);
-          // console.log("pairedhash", sortedDocuments[idx - 1].hash);
         }
       })
     );
@@ -53,10 +51,8 @@ export async function GET() {
       sortedDocuments.map(async (item, idx) => {
         if (idx % 2 == 0 && idx < sortedDocuments.length - 1) {
           await setDbHash(item.hash, sortedDocuments[idx + 1].hash);
-          // console.log("pairedHash", sortedDocuments[idx + 1].hash);
         } else {
           await setDbHash(item.hash, sortedDocuments[idx - 1].hash);
-          // console.log("pairedhash", sortedDocuments[idx - 1].hash);
         }
       })
     );

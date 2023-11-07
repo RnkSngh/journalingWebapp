@@ -8,18 +8,16 @@ export default function RetrieveJournalEntry() {
   const [pairedEntry, setPairedEntry] = useState("");
   const [entrySubmittedAt, setEntrySubmittedAt] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
-  // const path = usePathname();
 
   useEffect(() => {
-    console.log("running use effect");
-
     const findJournalEntry = async (hash: string) => {
       const entry = await readEntryFromHash(hash);
+
       if (entry && entry.updatedAt) {
+        setEntrySubmittedAt(entry!.updatedAt);
         const pairedHashText = await getPairedHashText(hash);
         if (pairedHashText?.text) {
           setPairedEntry(pairedHashText.text);
-          setEntrySubmittedAt(entry.updatedAt);
         }
       } else {
         setErrorMsg("Couldn&apos;t find your jouranl Entry");
@@ -29,9 +27,8 @@ export default function RetrieveJournalEntry() {
     const hash = localStorage.getItem("journalShare.hash");
     if (hash) {
       findJournalEntry(hash);
-      // findPairedJournalEntry(hash);
     }
-  });
+  }, []);
 
   return (
     <>
@@ -48,9 +45,9 @@ export default function RetrieveJournalEntry() {
         ) : (
           <p>
             {" "}
-            You&apos;ve submitted a journal entry but haven&apos;t yet been paired with
-            someone. Come back here after 3:00 am UTC to read someone else&apos;s
-            entry!{" "}
+            You&apos;ve submitted a journal entry but haven&apos;t yet been
+            paired with someone. Come back here after 3:00 am UTC to read
+            someone else&apos;s entry!{" "}
           </p>
         )
       ) : (

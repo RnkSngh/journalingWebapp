@@ -67,13 +67,14 @@ export default function SubmitJournalEntry() {
             </p>
             <p> {userEntry} </p>
           </div>
-        ) : null}
-        <button
-          type="submit"
-          className="bg-blue-200 flex rounded-full flex-nowrap"
-        >
-          Submit Entry
-        </button>
+        ) : (
+          <button
+            type="submit"
+            className="bg-blue-200 flex rounded-full flex-nowrap"
+          >
+            Submit Entry
+          </button>
+        )}
       </form>
     </div>
   );
