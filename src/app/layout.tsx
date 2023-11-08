@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import "./globals.css";
 import "./pages.css";
+import { Providers } from "./providers";
 
 export const metadata = {
   title: "New title",
@@ -14,10 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-[color:var(--background-color)]">
-        <Navbar></Navbar>
-        <div className="pl-10 pt-10">{children}</div>
-      </body>
+        <body className="bg-[color:var(--background-color)]">
+      <Providers>
+          <Navbar></Navbar>
+          <div className="pl-10 pt-10">{children}</div>
+      </Providers>
+        </body>
     </html>
   );
 }

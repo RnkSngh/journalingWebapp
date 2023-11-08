@@ -1,9 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
 import NavItem from "./NavItem";
-import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const MENU_LIST = [
@@ -11,7 +8,6 @@ export default function Navbar() {
     { text: "Submit", href: "/submit" },
     { text: "Lookup", href: "/lookup" },
   ];
-  // const router = useRouter();
 
   return (
     <header>
@@ -19,7 +15,7 @@ export default function Navbar() {
         <a href={"/"}>
           <p className="text-[color:var(--primary-color)] font-bold">
             {" "}
-            ScribbleSwap{" "}
+            ScribbleSwap v0.1{" "}
           </p>
         </a>
         <div

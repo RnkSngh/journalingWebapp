@@ -7,6 +7,8 @@ import {
   readEntryFromHash,
 } from "./actions/actions";
 import { RESET_TIME } from "./config";
+import { Select, Textarea, Button } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/layout";
 
 export default function SubmitJournalEntry() {
   const [userEntry, setUserEntry] = useState("");
@@ -60,25 +62,26 @@ export default function SubmitJournalEntry() {
   return (
     <div>
       <form action={handleFormSubmit}>
-        <h1> Submit Journal Entry </h1>
+        <Text fontSize="4xl" color="100" fontFamily="heading">
+          Submit Journal Entry
+        </Text>
         {!userEntry && (
           <>
             <label htmlFor="prompts">Choose a prompt:</label>
-            <select name="prompts" id="prompts">
+            <Select name="prompts" id="prompts">
               {prompts.map((prompt) => {
                 return (
-                  <>
-                    {" "}
-                    <option value={prompt}>{prompt}</option>
-                  </>
+                  <option key={prompt} value={prompt}>
+                    {prompt}
+                  </option>
                 );
               })}
-            </select>
-            <p>
+            </Select>
+            <Text color="100" fontFamily="body">
               {" "}
               Submit your Journal Entry here so that you can look it up later{" "}
-            </p>
-            <textarea
+            </Text>
+            <Textarea
               disabled={Boolean(userEntry)}
               className="w-500"
               name="journal-text-form"
@@ -88,21 +91,30 @@ export default function SubmitJournalEntry() {
 
         {userEntry ? (
           <div>
-            <p>
+            <Text color="100" fontFamily="body">
               It looks like you already submitted an entry for today! Once
-              matched, you can read a stranger&apos;s entry{" "}
+              matched, you can read a stranger's entry{" "}
               <a href="/submit"> here </a>!
-            </p>
-            <p> Prompt: {userEntryPrompt} </p>
-            <p> {userEntry} </p>
+            </Text>
+            <Text color="100" fontFamily="body">
+              {" "}
+              Prompt You Answered:{" "}
+              <Text color="100" fontFamily="mono">
+                {userEntryPrompt}{" "}
+              </Text>
+            </Text>
+            <Text color="100" fontFamily="body">
+              {" "}
+              Your Entry:{" "}
+            </Text>
+            <Text color="100" fontFamily="mono">
+              {userEntry}
+            </Text>
           </div>
         ) : (
-          <button
-            type="submit"
-            className="bg-blue-200 flex rounded-full flex-nowrap"
-          >
+          <Button type="submit" className="bg-green-300 " colorScheme="teal">
             Submit Entry
-          </button>
+          </Button>
         )}
       </form>
     </div>

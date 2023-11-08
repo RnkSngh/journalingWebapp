@@ -1,38 +1,43 @@
-// "use server";
+"use server";
 
-import React, { useEffect, useState } from "react";
 import {
   getEntriesCountForToday,
   getTotalEntriesCount,
 } from "./actions/actions";
+import { Text } from "@chakra-ui/layout";
 import InfoPage from "@/components/InfoPage";
 
 export default async function Home() {
-  // const [entriesToday, setEntriesToday] = useState<number | null>(null);
-  // const [entries, setEntries] = useState<number | null>(null);
-
-  // useEffect(() => {
-  //   const handleSetEntries = async () => {
-  //     const count = await getEntriesCountForToday();
-  //     setEntriesToday(count);
-  //     const totalCount = await getTotalEntriesCount();
-  //     setEntries(totalCount);
-  //   };
-  //   handleSetEntries();
-  // });
-
   const entries = await getTotalEntriesCount();
   const entriesToday = await getEntriesCountForToday();
   return (
     <div>
+      <Text fontSize="4xl" color="100" fontFamily="heading">
+        {" "}
+        Hi ... What is this?{" "}
+      </Text>
       <InfoPage />
       {entries === undefined ? (
         <h1> Loading Info data .. </h1>
       ) : (
         <div>
-          <p> Journals Reset at 3:00 AM UTC </p>
-          <p> There were {entries} entries submitted Total! </p>
-          <p> There were {entriesToday} entries submitted Today! </p>
+          <Text color="100" fontSize="2xl">
+            {" "}
+            Stats{" "}
+          </Text>
+          <Text color="100" fontFamily="body">
+            {" "}
+            Journals Reset at 3:00 AM UTC{" "}
+          </Text>
+          <Text color="100" fontFamily="body">
+            {" "}
+            There were {entries} entries submitted Total!{" "}
+          </Text>
+
+          <Text color="100" fontFamily="body">
+            {" "}
+            There were {entriesToday} entries submitted Today!{" "}
+          </Text>
         </div>
       )}
     </div>

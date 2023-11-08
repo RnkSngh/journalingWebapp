@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { getPairedHashText, readEntryFromHash } from "./actions/actions";
 import { useEffect, useState } from "react";
+import { Text } from "@chakra-ui/layout";
 
 export default function RetrieveJournalEntry() {
   const [pairedEntry, setPairedEntry] = useState("");
@@ -20,7 +21,7 @@ export default function RetrieveJournalEntry() {
           setPairedEntry(pairedHashText.text);
         }
       } else {
-        setErrorMsg("Couldn&apos;t find your jouranl Entry");
+        setErrorMsg("Couldn't find your journal Entry");
       }
     };
 
@@ -32,31 +33,40 @@ export default function RetrieveJournalEntry() {
 
   return (
     <>
-      <h1> Read a Stranger&apos;s Journal Entry </h1>
+      <Text color="100" fontFamily="heading" fontSize="4xl">
+        {" "}
+        Read a Stranger&apos;s Journal Entry{" "}
+      </Text>
       {entrySubmittedAt ? (
         pairedEntry ? (
           <>
-            <p>
+            <Text color="100" fontFamily="body">
               You&apos;ve been paired with another stranger&apos;s Journal
               Entry! Here it is:{" "}
-            </p>
-            <p>{pairedEntry}</p>
+            </Text>
+            <Text color="100" fontFamily="body">
+              {pairedEntry}
+            </Text>
           </>
         ) : (
-          <p>
-            {" "}
-            You&apos;ve submitted a journal entry but haven&apos;t yet been
-            paired with someone. Come back here after 3:00 am UTC to read
-            someone else&apos;s entry!{" "}
-          </p>
+          <Text color="100" fontFamily="body">
+            {
+              "You've submitted a journal entry but haven't yet been paired with someone. Come back here after 3:00 am UTC to read someone else's entry! "
+            }
+          </Text>
         )
       ) : (
-        <p>
+        <Text color="100" fontFamily="body">
           Looks like you haven&apos;t submitted a journal entry yet! Submit one
           <a href="/submit"> here </a>
-        </p>
+        </Text>
       )}
-      {errorMsg && <p> ERROR: {errorMsg}</p>}
+      {errorMsg && (
+        <Text color="100" fontFamily="body">
+          {" "}
+          ERROR: {errorMsg}
+        </Text>
+      )}
     </>
   );
 }
