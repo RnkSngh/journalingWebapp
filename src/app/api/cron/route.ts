@@ -44,41 +44,46 @@ export async function GET() {
 }
 
 const pairAndSend = async (sortedDocuments: any) => {
-  if (sortedDocuments.length % 2 === 0) {
-    await Promise.all(
-      sortedDocuments.map(async (item: any, idx: number) => {
-        if (idx % 2 == 0) {
-          await setDbHash(item.hash, sortedDocuments[idx + 1].hash);
-        } else {
-          await setDbHash(item.hash, sortedDocuments[idx - 1].hash);
-        }
-      })
-    );
-  } else if (sortedDocuments.length > 1) {
-    await Promise.all(
-      sortedDocuments.map(async (item: any, idx: number) => {
-        if (idx % 2 == 0 && idx < sortedDocuments.length - 1) {
-          await setDbHash(item.hash, sortedDocuments[idx + 1].hash);
-        } else {
-          await setDbHash(item.hash, sortedDocuments[idx - 1].hash);
-        }
-      })
-    );
+  let pinkySwear: Array<Promise<void>> = []; // Named pinkySwear because Sasha said so
+  let index = sortedDocuments.length - 1;
+  while (index > 0) {
+    if (index == 2) {
+      // When index is 2, there are 3 elements left, meaning index 0 also needs to be paired.
+      // Index can only be equal to 2 on odd length sortedDocuments
+
+      pinkySwear.push(setDbHash(sortedDocuments[0], sortedDocuments[1]));
+    }
+    const left = sortedDocuments[index - 1];
+    const right = sortedDocuments[index];
+    pinkySwear.push(setDbHash(left.hash, right.hash));
+    index -= 2;
   }
+
+  await Promise.all(pinkySwear);
 };
 
-const setDbHash = async (parentHash: string, pairedHash: string) => {
+const setDbHash = async (pairedHash1: string, pairedHash2: string) => {
   const client = await clientPromise;
   const db = client.db();
 
   try {
     await db.collection("posts").updateOne(
       {
-        hash: parentHash,
+        hash: pairedHash1,
       },
       {
         $set: {
-          pairedHash: pairedHash,
+          pairedHash: pairedHash2,
+        },
+      }
+    );
+    await db.collection("posts").updateOne(
+      {
+        hash: pairedHash2,
+      },
+      {
+        $set: {
+          pairedHash: pairedHash1,
         },
       }
     );
