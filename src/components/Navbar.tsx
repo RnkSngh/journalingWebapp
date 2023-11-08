@@ -26,10 +26,6 @@ export default function Navbar() {
           className={` bg-[color:var(--background-secondary-color)] nav__menu-list`}
         >
           {MENU_LIST.map((menu, idx) => (
-            // <Link href="/submitEntry" key={idx}>
-            //   {" "}
-            //   Test{" "}
-            // </Link>
             <NavItem key={menu.text} {...menu} />
           ))}
         </div>
