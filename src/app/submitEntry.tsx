@@ -29,7 +29,7 @@ type UserEntries = {
   [category: string]: UserEntry;
 };
 
-type CategoryToHash = {
+export type CategoryToHash = {
   [category: string]: string;
 };
 
@@ -54,7 +54,6 @@ export default function SubmitJournalEntry() {
             const hash = categoriesToHashes[category];
             const entry = await readEntryFromHash(hash);
             if (entry && entry.updatedAt > RESET_TIME) {
-              console.log("returning entry", entry, entry.prompt);
               return {
                 text: entry.text,
                 hash,

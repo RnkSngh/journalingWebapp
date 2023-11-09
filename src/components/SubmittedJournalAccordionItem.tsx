@@ -13,9 +13,9 @@ export default function SubmittedJournalAccordionItem(props: {
       <Text color="100" fontFamily="body">
         {" "}
         Prompt You Answered:{" "}
-        <Text color="100" fontFamily="mono">
-          {props.userEntry.prompt}{" "}
-        </Text>
+      </Text>
+      <Text color="100" fontFamily="mono">
+        {props.userEntry.prompt}{" "}
       </Text>
       <Text color="100" fontFamily="body">
         {" "}

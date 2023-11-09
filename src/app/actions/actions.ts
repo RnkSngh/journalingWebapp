@@ -52,7 +52,7 @@ export async function getPairedHashText(lookupHash: string) {
       .findOne({ hash: record.pairedHash });
     return pairedRecord;
   } else {
-    return { text: "" };
+    return { text: "", prompt: "", category: "" };
   }
 }
 

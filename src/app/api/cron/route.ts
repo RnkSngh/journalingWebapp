@@ -37,7 +37,6 @@ export async function GET() {
   ]);
 
   for await (const doc of sortedAggregate) {
-    console.log("document", doc);
     await pairAndSend(doc.entries);
   }
   return NextResponse.json({ ok: true, body: { success: true } });
