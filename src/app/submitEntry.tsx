@@ -4,58 +4,111 @@ import { useEffect, useState } from "react";
 import {
   addJournalHash,
   getTodaysPrompts,
+  readEntriesFromHashes,
   readEntryFromHash,
 } from "./actions/actions";
-import { RESET_TIME } from "./config";
-import { Select, Textarea, Button } from "@chakra-ui/react";
+import { RESET_TIME, CATEGORIES } from "./config";
+import {
+  Select,
+  Textarea,
+  Accordion,
+  AccordionItem,
+  AccordionPanel,
+  AccordionButton,
+  Box,
+  AccordionIcon,
+} from "@chakra-ui/react";
+import { Button } from "@chakra-ui/button";
 import { Text } from "@chakra-ui/layout";
+import SubmittedJournalAccordionItem from "@/components/SubmittedJournalAccordionItem";
+
+export type SubmitFormData = FormData & {
+  category: string;
+};
+type UserEntries = {
+  [category: string]: UserEntry;
+};
+
+type CategoryToHash = {
+  [category: string]: string;
+};
+
+export type UserEntry = {
+  text: string;
+  prompt: string;
+  hash: string;
+  category?: string;
+  updatedAt?: number;
+};
 
 export default function SubmitJournalEntry() {
-  const [userEntry, setUserEntry] = useState("");
-  const [userEntryPrompt, setUserEntryPrompt] = useState("");
+  const [userEntries, setUserEntries] = useState<UserEntries>({});
   const [prompts, setUserPrompts] = useState([""]);
 
   useEffect(() => {
-    console.log("submitEntry use effect");
-    const checkHash = async (hash: string) => {
-      const entry = await readEntryFromHash(hash);
+    const checkHashes = async (categoriesToHashes: CategoryToHash) => {
+      const savedEntries: (UserEntry | undefined)[] = await Promise.all(
+        Object.keys(categoriesToHashes)
+          .filter((category) => categoriesToHashes[category] !== undefined)
+          .map(async (category) => {
+            const hash = categoriesToHashes[category];
+            const entry = await readEntryFromHash(hash);
+            if (entry && entry.updatedAt > RESET_TIME) {
+              console.log("returning entry", entry, entry.prompt);
+              return {
+                text: entry.text,
+                hash,
+                category,
+                prompt: entry.prompt,
+              };
+            }
+          })
+      );
 
-      if (entry) {
-        console.log(
-          "date comparision",
-          Date.now() - entry.updatedAt,
-          RESET_TIME
-        );
-        if (Date.now() - entry.updatedAt > RESET_TIME) {
-          localStorage.setItem("journalShare.hash", "");
-        } else {
-          setUserEntry(entry.text);
-          if (entry.prompt) {
-            setUserEntryPrompt(entry.prompt);
-          }
+      let newUserEntries = { ...userEntries };
+
+      savedEntries.forEach((entry) => {
+        if (entry?.category) {
+          newUserEntries[entry.category] = entry;
         }
-      }
+      });
+      setUserEntries(newUserEntries);
     };
 
     const getPrompts = async () => {
       const prompts = await getTodaysPrompts();
-      console.log("setting user prompts", prompts);
       setUserPrompts(prompts);
     };
 
-    const hash = localStorage.getItem("journalShare.hash");
-    if (hash) {
-      checkHash(hash);
+    const hashDict = localStorage.getItem("journalShare.hashes");
+    if (hashDict) {
+      checkHashes(JSON.parse(hashDict));
     }
     getPrompts();
-  }, [userEntry]);
+  }, []);
 
-  const handleFormSubmit = async (formData: FormData) => {
+  const handleFormSubmit = async (formData: SubmitFormData) => {
     try {
-      console.log("form data", formData);
+      const category = formData.get("category");
+      const keysArray = Array.from(formData.keys());
+      const prompt: string | undefined = keysArray.find(
+        (key) => key !== "category" && formData.get(key) !== ""
+      );
+
+      const text: string | undefined = formData.get(prompt!)?.toString();
       const hash = await addJournalHash(formData);
-      localStorage.setItem("journalShare.hash", hash);
-      setUserEntry(hash);
+      const beforeHashMap = localStorage.getItem("journalShare.hashes");
+      let newHashMap: CategoryToHash =
+        beforeHashMap === null ? {} : JSON.parse(beforeHashMap);
+      newHashMap[category!.toString()] = hash;
+
+      localStorage.setItem("journalShare.hashes", JSON.stringify(newHashMap));
+      let newEntries: UserEntries = { ...userEntries };
+
+      if (text && prompt) {
+        newEntries[category!.toString()] = { hash, text, prompt };
+        setUserEntries(newEntries);
+      }
     } catch (e) {}
   };
 
@@ -65,57 +118,56 @@ export default function SubmitJournalEntry() {
         <Text fontSize="4xl" color="100" fontFamily="heading">
           Submit Journal Entry
         </Text>
-        {!userEntry && (
-          <>
-            <label htmlFor="prompts">Choose a prompt:</label>
-            <Select name="prompts" id="prompts">
-              {prompts.map((prompt) => {
-                return (
-                  <option key={prompt} value={prompt}>
-                    {prompt}
-                  </option>
-                );
-              })}
-            </Select>
-            <Text color="100" fontFamily="body">
-              {" "}
-              Submit your Journal Entry here so that you can look it up later{" "}
-            </Text>
-            <Textarea
-              disabled={Boolean(userEntry)}
-              className="w-500"
-              name="journal-text-form"
-            />
-          </>
-        )}
+        <label htmlFor="prompts">Choose a prompt:</label>
+        <Accordion allowToggle={true}>
+          {prompts.map((prompt, index) => {
+            return (
+              <AccordionItem key={prompt}>
+                <Text color="100">
+                  <AccordionButton>
+                    <Box as="span" flex="1" textAlign="left">
+                      {CATEGORIES[index]}
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </Text>
+                <AccordionPanel>
+                  {userEntries[CATEGORIES[index]] ? (
+                    <SubmittedJournalAccordionItem
+                      userEntry={userEntries[CATEGORIES[index]]}
+                    ></SubmittedJournalAccordionItem>
+                  ) : (
+                    <>
+                      <Text color="100" name="prompt">
+                        {" "}
+                        {prompt}{" "}
+                      </Text>
+                      <Textarea
+                        disabled={Boolean(userEntries[CATEGORIES[index]])}
+                        name={prompt}
+                        id="submission"
+                      />
+                      <Button
+                        type="submit"
+                        name="category"
+                        value={CATEGORIES[index]}
+                        colorScheme="blue"
+                        id="prompt"
+                      >
+                        Submit Entry
+                      </Button>
+                    </>
+                  )}
+                </AccordionPanel>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
 
-        {userEntry ? (
-          <div>
-            <Text color="100" fontFamily="body">
-              It looks like you already submitted an entry for today! Once
-              matched, you can read a stranger's entry{" "}
-              <a href="/submit"> here </a>!
-            </Text>
-            <Text color="100" fontFamily="body">
-              {" "}
-              Prompt You Answered:{" "}
-              <Text color="100" fontFamily="mono">
-                {userEntryPrompt}{" "}
-              </Text>
-            </Text>
-            <Text color="100" fontFamily="body">
-              {" "}
-              Your Entry:{" "}
-            </Text>
-            <Text color="100" fontFamily="mono">
-              {userEntry}
-            </Text>
-          </div>
-        ) : (
-          <Button type="submit" className="bg-green-300 " colorScheme="teal">
-            Submit Entry
-          </Button>
-        )}
+        <Text color="100" fontFamily="body">
+          {" "}
+          Submit your Journal Entry here so that you can look it up later{" "}
+        </Text>
       </form>
     </div>
   );

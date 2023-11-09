@@ -1,6 +1,7 @@
 "use client";
 
 import NavItem from "./NavItem";
+import { Text } from "@chakra-ui/layout";
 
 export default function Navbar() {
   const MENU_LIST = [
@@ -13,10 +14,10 @@ export default function Navbar() {
     <header>
       <nav className={`bg-[color:var(--background-secondary-color)]`}>
         <a href={"/"}>
-          <p className="text-[color:var(--primary-color)] font-bold">
+          <Text className="text-[color:var(--primary-color)] font-bold">
             {" "}
             ScribbleSwap v0.1{" "}
-          </p>
+          </Text>
         </a>
         <div
           className={` bg-[color:var(--background-secondary-color)] nav__menu-list`}

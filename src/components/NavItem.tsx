@@ -9,9 +9,6 @@ interface NavBarProps {
 
 export default function NavItem(props: NavBarProps) {
   const { text, href } = props;
-  const pathName = usePathname();
-  console.log("pathname", pathName, href);
-
   return (
     <Link
       href={href}

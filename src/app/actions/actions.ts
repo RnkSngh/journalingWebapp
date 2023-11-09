@@ -6,13 +6,20 @@ import { RESET_TIME, PROMPTS } from "../config";
 export async function addJournalHash(data: FormData) {
   const client = await clientPromise;
   const db = client.db();
-  const journalText = data.get("journal-text-form") as string;
-  let hash = await sha256(journalText);
+
+  const category = data.get("category");
+  const keysArray = Array.from(data.keys());
+  const prompt = keysArray.find(
+    (key) => key !== "category" && data.get(key) !== ""
+  );
+  const text = data.get(prompt!);
+  let hash = await sha256(text!.toString());
   db.collection("posts").insertOne({
-    text: data.get("journal-text-form"),
+    text,
     hash: hash,
     updatedAt: new Date(),
-    prompt: data.get("prompts"),
+    prompt: prompt,
+    category,
   });
 
   return hash;
@@ -22,11 +29,10 @@ export async function addJournalHash(data: FormData) {
 export async function readEntryFromHash(lookupHash: string) {
   "use server";
 
-  const hash = lookupHash;
   const client = await clientPromise;
   const db = client.db();
 
-  const record = await db.collection("posts").findOne({ hash: hash });
+  const record = await db.collection("posts").findOne({ hash: lookupHash });
   return record;
 }
 
