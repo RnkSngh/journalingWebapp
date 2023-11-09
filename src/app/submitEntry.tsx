@@ -4,12 +4,10 @@ import { useEffect, useState } from "react";
 import {
   addJournalHash,
   getTodaysPrompts,
-  readEntriesFromHashes,
   readEntryFromHash,
 } from "./actions/actions";
 import { RESET_TIME, CATEGORIES } from "./config";
 import {
-  Select,
   Textarea,
   Accordion,
   AccordionItem,
@@ -23,7 +21,7 @@ import { Text } from "@chakra-ui/layout";
 import SubmittedJournalAccordionItem from "@/components/SubmittedJournalAccordionItem";
 
 export type SubmitFormData = FormData & {
-  category: string;
+  category?: string;
 };
 type UserEntries = {
   [category: string]: UserEntry;
@@ -137,10 +135,7 @@ export default function SubmitJournalEntry() {
                     ></SubmittedJournalAccordionItem>
                   ) : (
                     <>
-                      <Text color="100" name="prompt">
-                        {" "}
-                        {prompt}{" "}
-                      </Text>
+                      <Text color="100"> {prompt} </Text>
                       <Textarea
                         disabled={Boolean(userEntries[CATEGORIES[index]])}
                         name={prompt}

@@ -8,7 +8,7 @@ export default function SubmittedJournalAccordionItem(props: {
     <>
       <Text color="100" fontFamily="body">
         It looks like you already submitted an entry for today! Once matched,
-        you can read a stranger's entry <a href="/submit"> here </a>!
+        you can read a stranger&apos;s entry <a href="/submit"> here </a>!
       </Text>
       <Text color="100" fontFamily="body">
         {" "}

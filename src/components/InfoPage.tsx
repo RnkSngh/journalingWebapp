@@ -26,10 +26,10 @@ export default function InfoPage() {
       <Text fontFamily="body" color="100">
         {" "}
         Each day, you can submit a journal entry for each category. Each
-        category has a prompt (which can change each day). If you'd rather write
-        something that's free-form, rather than addressing a prompt, there's a
-        "General" category as well. You can submit entries for as many (or as
-        little) categories as you'd like.
+        category has a prompt (which can change each day). If you&apos;d rather write
+        something that&apos;s free-form, rather than addressing a prompt, there&apos;s a
+        &quotGeneral&quot category as well. You can submit entries for as many (or as
+        little) categories as you&apos;d like.
       </Text>
       <Text color="100"> The current Categories Are:</Text>
       <UnorderedList>
@@ -39,13 +39,13 @@ export default function InfoPage() {
       </UnorderedList>
       <Text fontFamily="body" color="100">
         At the end of the day, every entry you submit will be paired with
-        someone else's from the same category. You will be able to read another
-        person's entries and they will be able to read yours! Both are anonymous
-        - so you won't be able to tell who it was just based on the match (But
+        someone else&apos;s from the same category. You will be able to read another
+        person&apos;s entries and they will be able to read yours! Both are anonymous
+        - so you won&apos;t be able to tell who it was just based on the match (But
         maybe based on the content of your journal entry){" "}
       </Text>
       <Text fontFamily="body" color="100">
-        To make things interesting, I'd recommend following the{" "}
+        To make things interesting, I&apos;d recommend following the{" "}
         <a href="/"> guidelines for connecting with strangers</a>
       </Text>
 
