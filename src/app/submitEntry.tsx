@@ -16,7 +16,7 @@ import {
   Box,
   AccordionIcon,
 } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/button";
+import { Button } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/layout";
 import SubmittedJournalAccordionItem from "@/components/SubmittedJournalAccordionItem";
 
@@ -112,9 +112,15 @@ export default function SubmitJournalEntry() {
   return (
     <div>
       <form action={handleFormSubmit}>
-        <Text fontSize="4xl" color="100" fontFamily="heading">
-          Submit Journal Entry
-        </Text>
+        <Box py={5}>
+          <Text fontSize="4xl" color="100" fontFamily="heading">
+            Submit Journal Entry
+          </Text>
+          <Text color="100" fontFamily="body">
+            {" "}
+            Submit your Journal Entry here so that you can look it up later{" "}
+          </Text>
+        </Box>
         <label htmlFor="prompts">Choose a prompt:</label>
         <Accordion allowToggle={true}>
           {prompts.map((prompt, index) => {
@@ -141,15 +147,17 @@ export default function SubmitJournalEntry() {
                         name={prompt}
                         id="submission"
                       />
-                      <Button
-                        type="submit"
-                        name="category"
-                        value={CATEGORIES[index]}
-                        colorScheme="blue"
-                        id="prompt"
-                      >
-                        Submit Entry
-                      </Button>
+                      <Box py={3}>
+                        <Button
+                          type="submit"
+                          variant="outline"
+                          name="category"
+                          value={CATEGORIES[index]}
+                          id="prompt"
+                        >
+                          Submit Entry
+                        </Button>
+                      </Box>
                     </>
                   )}
                 </AccordionPanel>
@@ -157,11 +165,6 @@ export default function SubmitJournalEntry() {
             );
           })}
         </Accordion>
-
-        <Text color="100" fontFamily="body">
-          {" "}
-          Submit your Journal Entry here so that you can look it up later{" "}
-        </Text>
       </form>
     </div>
   );

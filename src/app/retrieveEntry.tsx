@@ -128,11 +128,16 @@ export default function RetrieveJournalEntry() {
                     }
                   </Text>
                 ) : (
-                  <Text color="100" fontFamily="body">
-                    Looks like you haven&apos;t submitted a journal entry yet!
-                    Submit one
-                    <a href="/submit"> here </a>
-                  </Text>
+                  <>
+                    <Text as="span" color="100" fontFamily="body">
+                      Looks like you haven&apos;t submitted a journal entry yet!
+                      Submit one
+                    </Text>
+                    <Text as="span" color="400">
+                      {" "}
+                      here{" "}
+                    </Text>
+                  </>
                 )}
               </AccordionPanel>
             </AccordionItem>

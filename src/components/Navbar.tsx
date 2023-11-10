@@ -1,32 +1,62 @@
 "use client";
 
-import NavItem from "./NavItem";
-import { Text } from "@chakra-ui/layout";
+import { Box, Flex, HStack, Text, useDisclosure } from "@chakra-ui/react";
 
-export default function Navbar() {
-  const MENU_LIST = [
-    { text: "Home", href: "/" },
-    { text: "Submit", href: "/submit" },
-    { text: "Lookup", href: "/lookup" },
-  ];
+interface Props {
+  children: React.ReactNode;
+  to: string;
+}
+
+const MENU_LIST = [
+  { text: "Home", href: "/" },
+  { text: "Submit", href: "/submit" },
+  { text: "Swap", href: "/lookup" },
+];
+
+const NavLink = (props: Props) => {
+  const { to, children } = props;
 
   return (
-    <header>
-      <nav className={`bg-[color:var(--background-secondary-color)]`}>
-        <a href={"/"}>
-          <Text className="text-[color:var(--primary-color)] font-bold">
-            {" "}
-            ScribbleSwap v0.1{" "}
-          </Text>
-        </a>
-        <div
-          className={` bg-[color:var(--background-secondary-color)] nav__menu-list`}
+    <Box as="a" px={2} py={1} rounded={"md"} href={to}>
+      {children}
+    </Box>
+  );
+};
+
+export default function Simple() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <Box bg="300" px={4}>
+        <Flex
+          bg="300"
+          h={16}
+          alignItems={"center"}
+          justifyContent={"space-between"}
         >
-          {MENU_LIST.map((menu, idx) => (
-            <NavItem key={menu.text} {...menu} />
-          ))}
-        </div>
-      </nav>
-    </header>
+          <HStack spacing={8} alignItems={"center"}>
+            <a href={"/"}>
+              <Text color="200" fontFamily="logo" fontSize="4xl">
+                {" "}
+                ScribbleSwap v0.2{" "}
+              </Text>
+            </a>
+            <HStack
+              as={"nav"}
+              bg="300"
+              spacing={4}
+              display={{ base: "none", md: "flex" }}
+            >
+              {MENU_LIST.map((link) => (
+                <NavLink key={link.text} to={link.href}>
+                  <Text color="200">{link.text}</Text>
+                </NavLink>
+              ))}
+            </HStack>
+          </HStack>
+        </Flex>
+      </Box>
+    </>
   );
 }

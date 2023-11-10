@@ -1,16 +1,18 @@
 import { extendTheme } from "@chakra-ui/react";
 
-// example theme
 const theme = extendTheme({
   colors: {
-    100: "#3c3c3",
-    200: "#ff5a5f",
-    300: "#087e8b",
+    100: "#011936", // Text
+    200: "#C0DFA1", // Background
+    300: "#82A3A1", // Header bar
+    400: "#A40E4C", //Extra
   },
+
   fonts: {
     body: "system-ui, sans-serif",
     heading: "Georgia, serif",
     mono: "Menlo, monospace",
+    logo: `'Kristi', system-ui`,
   },
   fontSizes: {
     xs: "0.75rem",

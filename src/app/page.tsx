@@ -4,14 +4,14 @@ import {
   getEntriesCountForToday,
   getTotalEntriesCount,
 } from "./actions/actions";
-import { Text } from "@chakra-ui/layout";
+import { Text} from "@chakra-ui/layout";
 import InfoPage from "@/components/InfoPage";
 
 export default async function Home() {
   const entries = await getTotalEntriesCount();
   const entriesToday = await getEntriesCountForToday();
   return (
-    <div>
+    <>
       <Text fontSize="4xl" color="100" fontFamily="heading">
         {" "}
         Hi ... What is this?{" "}
@@ -40,6 +40,6 @@ export default async function Home() {
           </Text>
         </div>
       )}
-    </div>
+    </>
   );
 }

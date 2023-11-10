@@ -1,5 +1,6 @@
 "use client";
 
+import "@fontsource/kristi";
 import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../theme";
